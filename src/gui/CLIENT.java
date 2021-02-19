@@ -5,6 +5,10 @@
  */
 package gui;
 
+import java.security.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  *
  * @author Windows_94
@@ -19,7 +23,8 @@ public class CLIENT extends javax.swing.JFrame
 	{
 		initComponents();
 	}
-
+	
+	private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd.HH.mm"); //Date Format
 	/**
 	 * This method is called from within the constructor to initialize the form.
 	 * WARNING: Do NOT modify this code. The content of this method is always
@@ -279,16 +284,20 @@ public class CLIENT extends javax.swing.JFrame
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton1ActionPerformed
     {//GEN-HEADEREND:event_jButton1ActionPerformed
-        if(serverRunningRBtn.isSelected()) //If Server Is Running > Stop
+        Date date = new Date(System.currentTimeMillis());
+		if(serverRunningRBtn.isSelected()) //If Server Is Running > Stop
 		{
+			
 			serverRunningRBtn.setSelected(false);
 			serverStoppedRBtn.setSelected(true);
+			serverResponseTextArea.append("\nSYSTEM: Shutting Down Server : \n"+date+"\n");
 			//TODO > SHUTDOWN SERVER
 		}
 		else if(!serverRunningRBtn.isSelected()) //If Server Isn't Running > Run
 		{
 			serverRunningRBtn.setSelected(true);
 			serverStoppedRBtn.setSelected(false);
+			serverResponseTextArea.append("\nSYSTEM: Booting Up Server : \n"+date+"\n");			
 			//TODO > BOOTUP SERVER
 		}
     }//GEN-LAST:event_jButton1ActionPerformed
