@@ -156,22 +156,14 @@ public class CLIENT extends javax.swing.JFrame
         fNameLbl.setForeground(new java.awt.Color(0, 0, 0));
         fNameLbl.setText("First Name:");
 
-        fNameInput.setText("jTextField1");
-
         lNameLbl.setForeground(new java.awt.Color(0, 0, 0));
         lNameLbl.setText("Surname:");
-
-        lNameInput.setText("jTextField2");
 
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Age:");
 
-        jTextField1.setText("jTextField1");
-
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("Email:");
-
-        jTextField2.setText("jTextField2");
 
         javax.swing.GroupLayout serverFunctionsLayout = new javax.swing.GroupLayout(serverFunctions);
         serverFunctions.setLayout(serverFunctionsLayout);
