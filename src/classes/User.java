@@ -8,7 +8,7 @@ package classes;
 
 /**
  *
- * @author K00243015
+ * @author Windows_94
  */
 public class User 
 {

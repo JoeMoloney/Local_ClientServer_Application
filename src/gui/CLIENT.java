@@ -5,7 +5,10 @@
  */
 package gui;
 
-import java.security.Timestamp;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -242,6 +245,13 @@ public class CLIENT extends javax.swing.JFrame
         );
 
         shutdownProgramBtn.setText("Close Program");
+        shutdownProgramBtn.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                shutdownProgramBtnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -287,20 +297,27 @@ public class CLIENT extends javax.swing.JFrame
         Date date = new Date(System.currentTimeMillis());
 		if(serverRunningRBtn.isSelected()) //If Server Is Running > Stop
 		{
-			
 			serverRunningRBtn.setSelected(false);
 			serverStoppedRBtn.setSelected(true);
 			serverResponseTextArea.append("\nSYSTEM: Shutting Down Server : \n"+date+"\n");
-			//TODO > SHUTDOWN SERVER
+			shutdownServer(true);
 		}
 		else if(!serverRunningRBtn.isSelected()) //If Server Isn't Running > Run
 		{
 			serverRunningRBtn.setSelected(true);
 			serverStoppedRBtn.setSelected(false);
-			serverResponseTextArea.append("\nSYSTEM: Booting Up Server : \n"+date+"\n");			
-			//TODO > BOOTUP SERVER
+			serverResponseTextArea.append("\nSYSTEM: Booting Up Server : \n"+date+"\n");
+			SERVER s = new SERVER();
+			s.setVisible(true);
 		}
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void shutdownProgramBtnActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_shutdownProgramBtnActionPerformed
+    {//GEN-HEADEREND:event_shutdownProgramBtnActionPerformed
+        if(serverRunningRBtn.isSelected()) //Shutdown Server If Is Running
+			shutdownServer(true);
+		System.exit(0);
+    }//GEN-LAST:event_shutdownProgramBtnActionPerformed
 
 	/**
 	 * @param args the command line arguments
@@ -371,4 +388,19 @@ public class CLIENT extends javax.swing.JFrame
     private javax.swing.JRadioButton serverStoppedRBtn;
     private javax.swing.JButton shutdownProgramBtn;
     // End of variables declaration//GEN-END:variables
+
+	private void shutdownServer(boolean b)
+	{
+		try
+		{
+			Socket shutdownSocket = new Socket("localhost", 8001); //Setup Socket For Shutdown Signal
+			
+			DataOutputStream sos = new DataOutputStream(
+					shutdownSocket.getOutputStream()); //Shutdown Stream
+
+			System.out.println("Sending Shutdown Signal");
+			sos.writeBoolean(b); //Send Shutdown Signal
+			sos.flush(); //Empty DataStream
+		} catch(IOException ioe){System.err.println(ioe);}
+	}
 }

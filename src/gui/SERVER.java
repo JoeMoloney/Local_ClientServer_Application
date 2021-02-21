@@ -5,13 +5,19 @@
  */
 package gui;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.Date;
+
 /**
  *
  * @author Windows_94
  */
 public class SERVER extends javax.swing.JFrame
 {
-
 	/**
 	 * Creates new form SERVER
 	 */
@@ -30,17 +36,27 @@ public class SERVER extends javax.swing.JFrame
     private void initComponents()
     {
 
+        jScrollPane1 = new javax.swing.JScrollPane();
+        serverTextArea = new javax.swing.JTextArea();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        serverTextArea.setEditable(false);
+        serverTextArea.setBackground(new java.awt.Color(0, 0, 0));
+        serverTextArea.setColumns(20);
+        serverTextArea.setForeground(new java.awt.Color(204, 204, 255));
+        serverTextArea.setRows(5);
+        jScrollPane1.setViewportView(serverTextArea);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 759, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 307, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 535, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
         );
 
         pack();
@@ -90,8 +106,35 @@ public class SERVER extends javax.swing.JFrame
 				new SERVER().setVisible(true);
 			}
 		});
+		
+		try
+		{
+			serverTextArea.append("\nSERVER Started : \n"+date+"\n");
+			Date date = new Date(System.currentTimeMillis());
+			ServerSocket serverSocket = new ServerSocket(8000); //Data Server Socket
+			ServerSocket shutdownSocket = new ServerSocket(8001); //Shutdown Server Signal Socket
+			
+			Socket connectToClient = serverSocket.accept(); //Data Socket
+			Socket shutdownFromClient = shutdownSocket.accept(); //Shutdown Signal Socket
+			
+			DataInputStream dataInputStream = new DataInputStream(connectToClient.getInputStream()); //Data Input Stream
+			DataInputStream shutdownStream = new DataInputStream(shutdownFromClient.getInputStream()); //Shutdown Signal Input Stream
+			
+			DataOutputStream dataOutputStream = new DataOutputStream(connectToClient.getOutputStream()); //Data Output Stream
+			
+			
+			while(!shutdownStream.readBoolean() == true)
+			{
+				
+			}
+			System.out.println("SERVER: Shutting Down");
+		} catch(IOException ioe){System.err.println(ioe);}
+		
+		System.exit(0);
 	}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextArea serverTextArea;
     // End of variables declaration//GEN-END:variables
 }
